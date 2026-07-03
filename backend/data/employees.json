@@ -1,0 +1,11 @@
+[
+  {
+    "id": "E123",
+    "name": "Jane Doe",
+    "role": "Product Designer",
+    "department": "Design",
+    "email": "jane.doe@aurahr.com",
+    "leave_balance": 12,
+    "joined_date": "2025-03-15"
+  }
+]
