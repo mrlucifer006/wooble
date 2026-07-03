@@ -1,9 +1,48 @@
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Request
 from pydantic import BaseModel
 from typing import List, Optional
 import datetime
+import json
+import os
+from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI(title="AuraHR API", description="Intelligent Workplace OS Backend")
+
+# Allow all origins for easy linking (update in production)
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+@app.post("/api/track_visit")
+async def track_visit(request: Request):
+    client_ip = request.client.host if request.client else "unknown"
+    visit_data = {
+        "timestamp": datetime.datetime.now().isoformat(),
+        "client_ip": client_ip,
+        "user_agent": request.headers.get("user-agent", "unknown")
+    }
+    
+    file_path = "visits.json"
+    visits = []
+    
+    if os.path.exists(file_path):
+        try:
+            with open(file_path, "r") as f:
+                visits = json.load(f)
+        except json.JSONDecodeError:
+            pass
+            
+    visits.append(visit_data)
+    
+    with open(file_path, "w") as f:
+        json.dump(visits, f, indent=4)
+        
+    return {"status": "logged"}
+
 
 class LeaveRequest(BaseModel):
     employee_id: str

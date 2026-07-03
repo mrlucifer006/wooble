@@ -149,6 +149,12 @@ function App() {
     }, 1500);
   };
 
+  useEffect(() => {
+    // Log visit when the app loads
+    fetch('/api/track_visit', { method: 'POST' })
+      .catch(err => console.log('Tracking not available or backend offline.', err));
+  }, []);
+
   const navItems = [
     { id: 'dashboard', icon: PieChart, label: 'Dashboard' },
     { id: 'leaves', icon: Calendar, label: 'Leaves' },
