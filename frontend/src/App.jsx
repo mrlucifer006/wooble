@@ -20,8 +20,10 @@ const DashboardView = () => {
     setMessages(prev => [...prev, userMsg]);
     setInput('');
     
+    const API_BASE = import.meta.env.DEV ? '' : 'https://wooble-88nh.onrender.com';
+    
     try {
-      const response = await fetch(`/api/helpdesk?query=${encodeURIComponent(userMsg.text)}`, {
+      const response = await fetch(`${API_BASE}/api/helpdesk?query=${encodeURIComponent(userMsg.text)}`, {
         method: 'POST'
       });
       const data = await response.json();
@@ -151,7 +153,8 @@ function App() {
 
   useEffect(() => {
     // Log visit when the app loads
-    fetch('/api/track_visit', { method: 'POST' })
+    const API_BASE = import.meta.env.DEV ? '' : 'https://wooble-88nh.onrender.com';
+    fetch(`${API_BASE}/api/track_visit`, { method: 'POST' })
       .catch(err => console.log('Tracking not available or backend offline.', err));
   }, []);
 
