@@ -29,3 +29,6 @@ var/
 .venv
 venv/
 ENV/
+
+# Ensure JSON data files are tracked by git
+!backend/data/*.json
